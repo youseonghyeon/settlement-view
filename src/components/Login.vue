@@ -1,111 +1,136 @@
-<script setup>
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.js';
-</script>
-
-
 <template>
-  <div class="login-page">
-    <h1 class="display-4">Login</h1>
-    <form @submit.prevent="login" class="login-form">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" v-model="username" required class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required class="form-control">
-      </div>
-      <div class="button-group">
-        <button type="submit" class="btn btn-primary btn-lg">Login</button>
-        <button id="admin-login" type="button" class="btn btn-success btn-lg" @click="adminQuickLogin">Admin Quick
-          Login
-        </button>
-      </div>
-    </form>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div class="login-container">
+    <div class="form-container">
+      <h1 class="title">Login</h1>
+      <form @submit.prevent="login">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" v-model="username" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model="password" required class="form-control">
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button id="admin-login" type="button" class="btn btn-success" @click="adminQuickLogin">Admin Quick Login</button>
+        </div>
+      </form>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </div>
   </div>
 </template>
 
-<script>
+
+<script setup>
 import axios from 'axios';
 import {useCookies} from "vue3-cookies";
+import {useRouter} from "vue-router";
 
+const url = 'http://localhost:8001';
+let username = '';
+let password = '';
+let errorMessage = '';
 
-export default {
-  data() {
-    return {
-      username: '',
-      password: '',
-      errorMessage: '',
-      withCredentials: true
-    };
-  },
-  methods: {
-    login() {
-      const userCredentials = {
-        username: this.username,
-        password: this.password
-      };
+const router = useRouter(); // Get vue-router instance here
+const {cookies} = useCookies();
 
-      const url = 'http://localhost:8001';
-      axios.post(url + '/login', userCredentials, {withCredentials: true})
-          .then((response) => {
-            useCookies().cookies.set('MY-SESSION-ID', response.data);
+const requestLogin = (credentials) => {
+  axios.post(url + '/login', credentials)
+      .then((response) => {
+        if (response.data != null) {
+          alert('Login Successful!');
+          // store.dispatch('setUser', response.data.username);
+          cookies.set('MY-SESSION-ID', response.data.sessionId);
+          router.push('/home'); // Redirect to '/home' upon successful login
+        }
+      })
+      .catch(error => {
+        console.error('Login Failed:', error);
+      });
+};
 
-          })
-          .catch(error => {
-            // 요청이 실패했을 때 수행할 작업
-            console.log('Login Failed:', error);
-          });
-      // Default 로그인
-    },
-    adminQuickLogin() {
-      // Admin Quick Login 요청을 보내는 로직
-      const adminCredentials = {
-        username: 'admin',
-        password: 'admin',
-        withCredentials: true
-      };
-      const url = 'http://localhost:8001';
-      axios.post(url + '/login', adminCredentials)
-          .then((response) => {
-            useCookies().cookies.set('MY-SESSION-ID', response.data);
-          })
-          .catch(error => {
-            // 요청이 실패했을 때 수행할 작업
-            console.log('Admin Quick Login Failed:', error);
-          });
-    }
-  }
+const createCredentials = (un, pw) => {
+  return {
+    username: un,
+    password: pw,
+    withCredentials: true
+  };
 }
+
+const login = () => {
+  const credentials = createCredentials(username, password);
+  requestLogin(credentials);
+};
+
+const adminQuickLogin = () => {
+  const credentials = createCredentials('admin', 'admin');
+  requestLogin(credentials);
+};
 </script>
 
-<style>
-.login-page {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
+
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f5f5f5;
 }
 
-.login-form {
-  margin-top: 30px;
+.form-container {
+  width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 .button-group {
-  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .btn {
-  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: #007bff;
+  color: #fff;
 }
 
 .btn-success {
-  background-color: #28a745;
+  background: #28a745;
+  color: #fff;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: #dc3545;
+  font-weight: bold;
 }
 </style>
