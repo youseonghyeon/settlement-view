@@ -1,15 +1,16 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
     <h1 class="mb-4 text-center">Batch Processing Page</h1>
     <div class="mt-5">
-      <ul class="text-center">
-        <li>1. Insert Mock Data</li>
-        <li>2. Daily Settlement</li>
-        <li>3. Transfer Settlement</li>
-        <li>4. Retry Failed Transfer</li>
-        <li>5. Send Settlement Transfer Result Message</li>
+      <ul class="batch-process-list text-center">
+        <li>Step 1. Mock 데이터 Insert</li>
+        <li>Step 2. 일일 정산</li>
+        <li>Step 3. 정산 금액 송금</li>
+        <li>Step 4. 실패 내역 재송금</li>
+        <li>Step 5. 정산 보고서 생성</li>
       </ul>
     </div>
+
     <form @submit.prevent="startBatch" class="p-5 border rounded shadow">
       <div class="form-group">
         <label for="chunkSize">Chunk Size:</label>
@@ -36,11 +37,16 @@
     </form>
   </div>
 </template>
+
+
+
 <script>
 import { ref } from 'vue';
 import axios from "axios";
+import Test from "@/components/Test.vue";
 
 export default {
+  components: {Test},
   setup() {
     let chunkSize = ref(100);
     let mockSize = ref(100000);
@@ -49,6 +55,7 @@ export default {
     const requestBatchStart = () => {
       const url = 'http://localhost:8001/start-batch';
       const data = {
+        messageType: 'batch',
         chunkSize: chunkSize.value,
         mockSize: mockSize.value,
         targetDate: targetDate.value,
@@ -75,7 +82,14 @@ export default {
     };
   },
 };
+
+
+
+
+
 </script>
+
+
 <style scoped>
 .container {
   max-width: 600px;
@@ -87,15 +101,23 @@ h1 {
   color: #3182F6;
 }
 
-h2 {
-  color: #343a40;
+.batch-process-list {
+  padding: 0;
+  list-style-type: none;
+  line-height: 2;
 }
 
-p {
-  color: #6c757d;
+.batch-process-list li {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
   background-color: #f8f9fa;
+  margin-top: 20px;
 }
 </style>

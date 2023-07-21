@@ -1,41 +1,60 @@
 <template>
-  <div class="container">
-    <h1>Logging Page!</h1>
-    <div class="logs">
-      <p v-for="(log, index) in logs" :key="index">{{ log }}</p>
+  <div class="container my-4">
+    <h1 class="text-center mb-4">Logging Page!</h1>
+    <div class="card logs-card">
+      <div class="card-header">
+        <h5>Spring Logs</h5>
+      </div>
+      <div class=" ">
+        <div class="list-group-item" v-for="(log, index) in logs" :key="index">
+          {{ log }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import { io } from "socket.io-client";
-export default {
-  // data() {
-  //   return {
-  //     socket: null,
-  //     logs: [],
-  //   };
-  // },
-  // created() {
-  //   this.socket = io('http://localhost:8001');
-  //   this.socket.on('log', (log) => {
-  //     this.logs.push(log);
-  //   });
-  // },
-  // beforeDestroy() {
-  //   if (this.socket) {
-  //     this.socket.disconnect();
-  //   }
-  // },
-}
+
+<script setup>
+import {onMounted, ref} from 'vue'
+import axios from 'axios'
+
+let logs = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8001/logging')
+    if (typeof response.data === 'string') {
+      logs.value = response.data.split('\n');
+    } else {
+      logs.value = response.data;
+    }
+
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>
 
 <style scoped>
-.logs {
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logs-card {
   height: 400px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  overflow-y: scroll;
-  margin-top: 20px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.list-group-item {
+  border: none;
+  white-space: nowrap;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
 }
 </style>

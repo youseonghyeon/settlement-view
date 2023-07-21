@@ -15,6 +15,7 @@ const router = createRouter({
         {path: '/batch', component: () => import('./components/Batch.vue')},
         {path: '/about', component: () => import('./components/About.vue')},
         {path: '/logging', component: () => import('./components/Logging.vue')},
+        {path: '/test', component: () => import('./components/Test.vue')}
     ]
 })
 

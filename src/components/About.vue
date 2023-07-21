@@ -7,7 +7,8 @@
         <p>
           <strong>Name:</strong> 유성현<br>
           <strong>Job:</strong> 백엔드<br>
-          <strong>Email:</strong> dolla_@naver.com
+          <strong>Email:</strong> dolla_@naver.com<br>
+          <strong>Blog:</strong> <a href="https://youseong.tistory.com" class="styled-link">Seonghyeon Blog</a>
         </p>
       </div>
       <div class="col-lg-6">
@@ -45,5 +46,14 @@ h1, h2 {
 }
 p, li {
   color: #6c757d;
+}
+.styled-link {
+  color: #17a2b8;   /* Change to the color of your choice */
+  text-decoration: none;
+  font-weight: bold;
+}
+.styled-link:hover {
+  color: #138496;  /* Change to the color of your choice */
+  text-decoration: underline;
 }
 </style>
