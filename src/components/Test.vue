@@ -49,7 +49,7 @@ import {io} from "socket.io-client";
 
 export default {
   setup() {
-    const showLogs = ref(false); // Initialize as hidden
+    const showLogs = ref(true); // Initialize as hidden
 
     const toggleDiv = () => {
       showLogs.value = !showLogs.value;

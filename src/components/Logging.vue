@@ -5,36 +5,48 @@
       <div class="card-header">
         <h5>Spring Logs</h5>
       </div>
-      <div class=" ">
-        <div class="list-group-item" v-for="(log, index) in logs" :key="index">
+      <div class="">
+        <li class="list-group-item" v-for="(log, index) in logs" :key="index">
           {{ log }}
-        </div>
+        </li>
       </div>
     </div>
   </div>
 </template>
 
+<script>
 
-<script setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref} from 'vue';
 import axios from 'axios'
 
-let logs = ref([])
+export default {
+  setup() {
+    let logs = ref([]);
 
-onMounted(async () => {
-  try {
-    const response = await axios.get('http://localhost:8001/logging')
-    if (typeof response.data === 'string') {
-      logs.value = response.data.split('\n');
-    } else {
-      logs.value = response.data;
+
+    onMounted(async () => {
+      try {
+        const response = await axios.get('http://localhost:8001/logging')
+        logs.value = response.data.split('\n');
+        console.log(logs.value.length)
+
+      } catch (error) {
+        console.error(error)
+      }
+
+    })
+
+
+    return {
+      logs
     }
-
-  } catch (error) {
-    console.error(error)
   }
-})
+
+}
+
+
 </script>
+
 
 <style scoped>
 .container {
@@ -52,6 +64,7 @@ onMounted(async () => {
 .list-group-item {
   border: none;
   white-space: nowrap;
+  font-size: 14px;
 }
 
 .list-group-item:last-child {

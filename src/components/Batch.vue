@@ -11,6 +11,12 @@
       </ul>
     </div>
 
+    <transition name="fade" appear>
+      <div class="card logs-card" v-show="showBatchStatusWindow">
+        <BatchStatusWindow/>
+      </div>
+    </transition>
+
     <form @submit.prevent="startBatch" class="p-5 border rounded shadow">
       <div class="form-group">
         <label for="chunkSize">Chunk Size:</label>
@@ -39,15 +45,18 @@
 </template>
 
 
-
 <script>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import axios from "axios";
 import Test from "@/components/Test.vue";
+import BatchStatusWindow from "@/components/BatchStatusWindow.vue";
 
 export default {
-  components: {Test},
+  components: {BatchStatusWindow, Test},
+
   setup() {
+
+    const showBatchStatusWindow = ref(false); // Initialize as hidden
     let chunkSize = ref(100);
     let mockSize = ref(100000);
     let targetDate = ref(new Date().toISOString().substr(0, 10));
@@ -71,10 +80,12 @@ export default {
     };
 
     const startBatch = () => {
+      showBatchStatusWindow.value = true
       requestBatchStart();
     };
 
     return {
+      showBatchStatusWindow,
       chunkSize,
       mockSize,
       targetDate,
@@ -82,11 +93,6 @@ export default {
     };
   },
 };
-
-
-
-
-
 </script>
 
 
@@ -120,4 +126,13 @@ form {
   background-color: #f8f9fa;
   margin-top: 20px;
 }
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+
 </style>
