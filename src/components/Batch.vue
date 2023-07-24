@@ -11,11 +11,7 @@
       </ul>
     </div>
 
-    <transition name="fade" appear>
-      <div class="card logs-card" v-show="showBatchStatusWindow">
-        <BatchStatusWindow/>
-      </div>
-    </transition>
+    <BatchStatusWindow/>
 
     <form @submit.prevent="startBatch" class="p-5 border rounded shadow">
       <div class="form-group">
@@ -40,6 +36,7 @@
         <input type="date" id="targetDate" v-model="targetDate" required class="form-control">
       </div>
       <button type="submit" class="btn btn-primary mt-3">Start</button>
+      <button type="button" class="btn btn-primary mt-3">DB Reset</button>
     </form>
   </div>
 </template>
@@ -80,12 +77,10 @@ export default {
     };
 
     const startBatch = () => {
-      showBatchStatusWindow.value = true
       requestBatchStart();
     };
 
     return {
-      showBatchStatusWindow,
       chunkSize,
       mockSize,
       targetDate,

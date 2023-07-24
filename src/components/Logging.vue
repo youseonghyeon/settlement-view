@@ -11,40 +11,74 @@
         </li>
       </div>
     </div>
+    <div>
+      <button type="button" class="btn btn-primary mt-3" @click="clear">Clear</button>
+    </div>
   </div>
 </template>
 
-<script>
 
-import {onMounted, ref} from 'vue';
-import axios from 'axios'
+<script>
+import {onBeforeUnmount, onMounted, ref} from 'vue';
+import axios from "axios";
 
 export default {
+
   setup() {
     let logs = ref([]);
-
+    let socket;
 
     onMounted(async () => {
       try {
         const response = await axios.get('http://localhost:8001/logging')
         logs.value = response.data.split('\n');
-        console.log(logs.value.length)
-
       } catch (error) {
         console.error(error)
       }
+      // 웹소켓 객체 생성
+      socket = new WebSocket('ws://localhost:8001/was-socket');
 
-    })
+      // 웹소켓이 연결되면 호출되는 이벤트
+      socket.onopen = (event) => {
+        console.log("WebSocket is open now.");
+      };
 
+      // 웹소켓으로부터 메시지를 받으면 호출되는 이벤트
+      socket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        console.log(message);
+        if (message.type === 'LOG') {
+          logs.value.push(message.subject);
+        }
+      };
+
+      // 웹소켓이 닫히면 호출되는 이벤트
+      socket.onclose = (event) => {
+        console.log("WebSocket is closed now.");
+      };
+
+      // 웹소켓 중 오류가 발생하면 호출되는 이벤트
+      socket.onerror = (event) => {
+        console.error("WebSocket error observed:", event);
+      };
+    });
+
+    onBeforeUnmount(() => {
+      if (socket) {
+        socket.close();
+      }
+    });
+
+    const clear = () => {
+      logs.value = [];
+    };
 
     return {
-      logs
-    }
-  }
-
-}
-
-
+      logs,
+      clear
+    };
+  },
+};
 </script>
 
 
@@ -56,7 +90,7 @@ export default {
 }
 
 .logs-card {
-  height: 400px;
+  height: 500px;
   overflow-y: auto;
   overflow-x: auto;
 }
@@ -64,7 +98,7 @@ export default {
 .list-group-item {
   border: none;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .list-group-item:last-child {

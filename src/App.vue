@@ -22,10 +22,6 @@
             <router-link to="/about" class="nav-link text-light">About</router-link>
           </li>
 
-          <li class="nav-item">
-            <router-link to="/test" class="nav-link text-light">Test</router-link>
-          </li>
-
         </ul>
       </div>
     </nav>

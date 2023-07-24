@@ -1,16 +1,22 @@
 <template>
-  <div class="container text-center pt-5">
-    <h3 class="welcome-text mb-4">{{ subject }}</h3>
-    <p class="lead">{{ detail }}</p>
-    <!-- <img :src="image" alt="" class="logo"> -->
-  </div>
+  <transition name="fade" appear>
+    <div class="card logs-card" v-show="show">
+      <div class="container text-center pt-5">
+        <h3 class="welcome-text mb-4">{{ subject }}</h3>
+        <p class="lead">{{ detail }}</p>
+        <!-- <img :src="image" alt="" class="logo"> -->
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-import {ref, onMounted, onBeforeUnmount} from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 
 export default {
+
   setup() {
+    const show = ref(false);
     const subject = ref('작업 시작을 대기중입니다.');
     const detail = ref('잠시만 기다려주세요.');
 
@@ -28,8 +34,8 @@ export default {
       // 웹소켓으로부터 메시지를 받으면 호출되는 이벤트
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log(message);
-        if (message.type == 'BATCH_STATUS') {
+        if (message.type === 'STATUS') {
+          show.value = true;
           subject.value = message.subject;
           detail.value = message.detail;
         }
@@ -55,6 +61,7 @@ export default {
     return {
       subject,
       detail,
+      show
     };
   },
 };
