@@ -1,9 +1,14 @@
 <template>
   <transition name="fade" appear>
     <div class="card logs-card" v-show="show">
+      <div class="resource-status">
+        <span>CPU : {{ cpuUsage }}</span>
+        <span>MEM : {{ memUsage }}</span>
+      </div>
       <div class="container text-center pt-5">
         <h3 class="welcome-text mb-4">{{ subject }}</h3>
         <p class="lead">{{ detail }}</p>
+        <img class="status-img" :src="image" alt="">
         <!-- <img :src="image" alt="" class="logo"> -->
       </div>
     </div>
@@ -19,6 +24,9 @@ export default {
     const show = ref(false);
     const subject = ref('작업 시작을 대기중입니다.');
     const detail = ref('잠시만 기다려주세요.');
+    const image = ref('');
+    const cpuUsage = ref();
+    const memUsage = ref();
 
     let socket;
 
@@ -38,6 +46,15 @@ export default {
           show.value = true;
           subject.value = message.subject;
           detail.value = message.detail;
+          image.value = '../src/assets/' + message.img;
+
+
+        } else if (message.type === 'RESOURCE') {
+          cpuUsage.value = message.cpu;
+          memUsage.value = message.memory;
+
+
+
         }
       };
 
@@ -61,7 +78,10 @@ export default {
     return {
       subject,
       detail,
-      show
+      image,
+      show,
+      cpuUsage,
+      memUsage
     };
   },
 };
@@ -79,5 +99,18 @@ body {
 
 .lead {
   color: #6c757d;
+}
+
+.resource-status {
+  width: 220px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 0.8rem;
+}
+
+.status-img {
+  height: 90px;
+  margin: 4px 0 21px 0px;
 }
 </style>

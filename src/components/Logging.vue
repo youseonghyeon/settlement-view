@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-    <h1 class="text-center mb-4">Logging Page!</h1>
+    <h1 class="mb-4 text-center">Logging Page!</h1>
     <div class="card logs-card">
       <div class="card-header">
         <h5>Spring Logs</h5>
@@ -46,7 +46,6 @@ export default {
       // 웹소켓으로부터 메시지를 받으면 호출되는 이벤트
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log(message);
         if (message.type === 'LOG') {
           logs.value.push(message.subject);
         }
@@ -83,6 +82,12 @@ export default {
 
 
 <style scoped>
+
+h1 {
+  color: #3182F6;
+}
+
+
 .container {
   max-width: 1200px;
   margin-left: auto;
