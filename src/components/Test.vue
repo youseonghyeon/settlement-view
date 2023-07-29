@@ -1,63 +1,28 @@
 <template>
-  <transition name="expand">
-    <div class="card logs-card" v-show="showLogs">
-      <div class="card-header">
-        <h5>Spring Logs</h5>
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item" v-for="(log, index) in logs" :key="index">{{ log }}</li>
-      </ul>
-    </div>
-  </transition>
-  <button class="btn btn-primary" @click="toggleDiv">로그 보이기/숨기기</button>
+  <button class="btn" @click="requestTest">getTest</button>
 </template>
-
-<style scoped>
-.container {
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.logs-card {
-  overflow-y: auto;
-}
-
-.list-group-item {
-  border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, .125);
-}
-
-.list-group-item:last-child {
-  border-bottom: none;
-}
-
-/* Add these lines for the animation */
-.expand-enter-active, .expand-leave-active {
-  transition: height 1s;
-}
-
-.expand-enter, .expand-leave-to {
-  height: 0;
-}
-</style>
 
 
 <script>
 import {ref} from 'vue';
 import {io} from "socket.io-client";
+import axios from "axios";
 
 export default {
   setup() {
-    const showLogs = ref(true); // Initialize as hidden
 
-    const toggleDiv = () => {
-      showLogs.value = !showLogs.value;
+    const requestTest = () => {
+      axios.get("http://www.sideproject.site:8001/test")
+          .then((response) => {
+            console.log(response.data);
+            alert(response.data);
+          }).catch((error) => {
+        console.log(error);
+      });
     };
 
     return {
-      showLogs,
-      toggleDiv,
+      requestTest
       // Other script parts remain the same
     }
   }

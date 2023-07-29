@@ -32,6 +32,7 @@ export default {
 
     onMounted(() => {
       // 웹소켓 객체 생성
+      // socket = new WebSocket('ws://www.sideproject.site:8001/was-socket');
       socket = new WebSocket('ws://localhost:8001/was-socket');
 
       // 웹소켓이 연결되면 호출되는 이벤트

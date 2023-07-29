@@ -7,7 +7,7 @@
         <li>Step 2. 일일 정산</li>
         <li>Step 3. 정산 금액 송금</li>
         <li>Step 4. 실패 내역 재송금</li>
-        <li>Step 5. 정산 보고서 생성</li>
+        <li>Step 5. 정산 내역 이메일 전송</li>
       </ul>
     </div>
 
@@ -18,6 +18,7 @@
         <label for="chunkSize">Chunk Size:</label>
         <select id="chunkSize" v-model="chunkSize" required class="form-control">
           <option value="100">100</option>
+          <option value="500">500</option>
           <option value="1000">1000</option>
           <option value="5000">5000</option>
         </select>
@@ -26,9 +27,15 @@
         <label for="mockDataSize">Mock Data Size:</label>
         <select id="mockDataSize" v-model="mockSize" required class="form-control">
           <option value="100000">100,000</option>
+          <option value="200000">200,000</option>
+          <option value="300000">300,000</option>
+          <option value="400000">400,000</option>
+          <option value="500000">500,000</option>
+          <option value="600000">600,000</option>
+          <option value="700000">700,000</option>
+          <option value="800000">800,000</option>
+          <option value="900000">900,000</option>
           <option value="1000000">1,000,000</option>
-          <option value="10000000">10,000,000</option>
-          <option value="100000000">100,000,000</option>
         </select>
       </div>
       <div class="form-group">
@@ -59,12 +66,14 @@ export default {
     let targetDate = ref(new Date().toISOString().substr(0, 10));
 
     const requestBatchStart = () => {
+      // const url = 'http://www.sideproject.site:8001/start-batch';
       const url = 'http://localhost:8001/start-batch';
+
       const data = {
         messageType: 'batch',
         chunkSize: chunkSize.value,
         mockSize: mockSize.value,
-        targetDate: targetDate.value,
+        targetDate: targetDate.value
       };
 
       axios.post(url, data)

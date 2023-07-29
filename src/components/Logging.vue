@@ -30,12 +30,16 @@ export default {
 
     onMounted(async () => {
       try {
-        const response = await axios.get('http://localhost:8001/logging')
+        // const response = await axios.get('http://www.sideproject.site:8001/logging',
+        const response = await axios.get('http://localhost:8001/logging',
+            {withCredentials: true}
+        )
         logs.value = response.data.split('\n');
       } catch (error) {
         console.error(error)
       }
       // 웹소켓 객체 생성
+      // socket = new WebSocket('ws://www.sideproject.site:8001/was-socket');
       socket = new WebSocket('ws://localhost:8001/was-socket');
 
       // 웹소켓이 연결되면 호출되는 이벤트

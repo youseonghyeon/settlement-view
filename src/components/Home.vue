@@ -5,7 +5,7 @@
 
     <!-- Server and Framework logos -->
     <div class="framework-logos">
-      <div class="lead bold">HH Web Server and Framework</div>
+      <div class="lead bold">Web Server and Framework</div>
       <img src="../assets/nginx.png" alt="Nginx logo" class="logo-nginx">
       <img src="../assets/vue.png" alt="Vue logo" class="logo-vue">
     </div>
