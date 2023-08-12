@@ -14,8 +14,7 @@
       <div class="col-lg-6">
         <h2>About This Project</h2>
         <p>
-          This project is a demonstration of a variety of technologies, including Vue.js, Vuex, Vue Router, and BootstrapVue.
-          It is intended to serve as a portfolio piece and as an example of modern web development practices.
+          웹을 이용한 간단한 배치 실행 사이트
         </p>
       </div>
     </div>
@@ -25,9 +24,6 @@
         <ul>
           <li>Java</li>
           <li>Spring</li>
-          <li>Vue Router</li>
-          <li>BootstrapVue</li>
-          <li>And many more...</li>
         </ul>
       </div>
     </div>

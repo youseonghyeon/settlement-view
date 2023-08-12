@@ -43,7 +43,6 @@
         <input type="date" id="targetDate" v-model="targetDate" required class="form-control">
       </div>
       <button type="submit" class="btn btn-primary mt-3">Start</button>
-      <button type="button" class="btn btn-primary mt-3">DB Reset</button>
     </form>
   </div>
 </template>
